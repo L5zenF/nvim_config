@@ -3,9 +3,10 @@
 -- Add any additional keymaps here
 
 -- 打开/关闭浮动终端
-vim.keymap.set("n", "<leader>ft", ":FloatermToggle<CR>", { desc = "Toggle floating terminal" })
+-- vim.keymap.set("n", "<leader>ft", ":FloatermToggle<CR>", { desc = "Toggle floating terminal" })
 -- 新建终端
-vim.keymap.set("n", "<leader>fn", ":FloatermNew<CR>", { desc = "New floating terminal" })
+-- vim.keymap.set("n", "<leader>fn", ":FloatermNew<CR>", { desc = "New floating terminal" })
+--
 
 -- 终端 esc 退出
 -- vim.api.nvim_set_keymap("t", "<Esc>", "<C-\\><C-n>", { noremap = true, silent = true })
