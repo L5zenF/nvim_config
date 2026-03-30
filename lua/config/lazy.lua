@@ -18,7 +18,6 @@ require("lazy").setup({
   spec = {
     -- LazyVim base
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
-    { import = "plugins" },
 
     -- ========== AI ==========
     { import = "lazyvim.plugins.extras.ai.copilot" },
@@ -78,6 +77,9 @@ require("lazy").setup({
 
     -- ========== VSCode ==========
     { import = "lazyvim.plugins.extras.vscode" },
+
+    -- Custom plugins (must be last)
+    { import = "plugins" },
   },
   defaults = {
     lazy = false,

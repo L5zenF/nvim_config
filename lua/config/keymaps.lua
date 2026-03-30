@@ -26,3 +26,13 @@ vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous search result (centered)" }
 -- Quickfix navigation (complements LazyVim's <leader>xq)
 vim.keymap.set("n", "[q", vim.cmd.cprev, { desc = "Previous quickfix" })
 vim.keymap.set("n", "]q", vim.cmd.cnext, { desc = "Next quickfix" })
+
+-- Neovide macOS keybindings
+if vim.g.neovide then
+  vim.keymap.set("n", "<D-s>", ":w<CR>") -- Save
+  vim.keymap.set("v", "<D-c>", '"+y') -- Copy
+  vim.keymap.set("n", "<D-v>", '"+P') -- Paste normal mode
+  vim.keymap.set("v", "<D-v>", '"+P') -- Paste visual mode
+  vim.keymap.set("c", "<D-v>", "<C-R>+") -- Paste command mode
+  vim.keymap.set("i", "<D-v>", "<C-R>+") -- Paste insert mode
+end
