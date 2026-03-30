@@ -2,6 +2,38 @@
 -- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
 -- Add any additional autocmds here
 
+-- 打开文件时自动定位到上次编辑位置
+vim.api.nvim_create_autocmd("BufReadPost", {
+  callback = function()
+    local mark = vim.api.nvim_buf_get_mark(0, '"')
+    if mark[1] > 0 and mark[1] <= vim.api.nvim_buf_line_count(0) then
+      pcall(vim.api.nvim_win_set_cursor, 0, mark)
+    end
+  end,
+})
+
+-- 保存时自动创建目录
+vim.api.nvim_create_autocmd("BufWritePre", {
+  callback = function()
+    local dir = vim.fn.expand("<afile>:p:h")
+    if vim.fn.isdirectory(dir) == 0 then
+      vim.fn.mkdir(dir, "p")
+    end
+  end,
+})
+
+-- 大文件性能优化 (>1MB)
+vim.api.nvim_create_autocmd("BufReadPre", {
+  callback = function()
+    local size = vim.fn.getfsize(vim.fn.expand("<afile>"))
+    if size > 1024 * 1024 then
+      vim.opt_local.eventignore = "all"
+      vim.opt_local.foldmethod = "manual"
+      vim.opt_local.undofile = false
+    end
+  end,
+})
+
 -- Fix file type detection for uppercase file extensions
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = "*",
