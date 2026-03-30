@@ -11,7 +11,6 @@ return {
       },
       query = {
         [""] = "rainbow-delimiters",
-        lua = "rainbow-blocks",
       },
       highlight = {
         "RainbowDelimiterRed",
