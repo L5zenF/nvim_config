@@ -7,28 +7,30 @@ return {
       local mc = require("multicursor-nvim")
       mc.setup()
 
+      local set = vim.keymap.set
+
       -- Add cursors with mouse
-      mc.addKey("map", "<C-leftmouse>", mc.addCursor)
-      mc.addKey("map", "<C-leftdrag>", mc.cursorDrag)
+      set("n", "<C-leftmouse>", mc.addCursor)
+      set("n", "<C-leftdrag>", mc.cursorDrag)
 
       -- Add/skip cursor above/below
-      mc.addKey("n", "<c-k>", mc.cursorUp)
-      mc.addKey("n", "<c-j>", mc.cursorDown)
-      mc.addKey("n", "<s-up>", mc.cursorSkipUp)
-      mc.addKey("n", "<s-down>", mc.cursorSkipDown)
+      set("n", "<c-k>", mc.cursorUp)
+      set("n", "<c-j>", mc.cursorDown)
+      set("n", "<s-up>", mc.cursorSkipUp)
+      set("n", "<s-down>", mc.cursorSkipDown)
 
       -- Add all matches
-      mc.addKey("n", "<c-a>", mc.matchAllAdd)
+      set("n", "<c-a>", mc.matchAllAdd)
 
       -- Rotate cursor
-      mc.addKey("n", "<c-n>", mc.nextCursor)
-      mc.addKey("n", "<c-p>", mc.prevCursor)
+      set("n", "<c-n>", mc.nextCursor)
+      set("n", "<c-p>", mc.prevCursor)
 
       -- Delete cursor
-      mc.addKey("n", "<c-x>", mc.deleteCursor)
+      set("n", "<c-x>", mc.deleteCursor)
 
       -- Align cursors
-      mc.addKey("n", "<leader>a", mc.alignCursors)
+      set("n", "<leader>a", mc.alignCursors)
     end,
   },
 }

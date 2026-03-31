@@ -6,7 +6,7 @@ return {
       auto_toggle = false,
       max_minimap_height = 20,
       minimap_width = 20,
-      use_treesitter = true,
+      use_treesitter = false, -- treesitter integration broken with new nvim-treesitter
       use_lsp = true,
       exclude_filetypes = { "help", "dashboard", "lazy", "mason", "neo-tree", "NvimTree", "Trouble" },
     },
