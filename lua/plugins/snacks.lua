@@ -13,7 +13,20 @@ return {
       picker = {
         sources = {
           explorer = {
-            hidden = true,
+            hidden = false,
+            ignored = false,
+            win = {
+              list = {
+                keys = {
+                  ["H"] = function(picker)
+                    picker.opts.hidden = not picker.opts.hidden
+                    picker.opts.ignored = not picker.opts.ignored
+                    picker.list:set_target()
+                    picker:find()
+                  end,
+                },
+              },
+            },
           },
         },
       },
