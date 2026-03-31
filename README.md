@@ -94,8 +94,7 @@ nvim
 │       ├── markdown-preview.lua
 │       ├── multicursor.lua   # 多光标编辑
 │       ├── arrow.lua         # 文件书签
-│       ├── automkdir.lua     # 自动创建目录
-│       ├── autosave (内置)    # 自动保存 (autocmds.lua)
+│       ├── autosave (内置)    # 防抖自动保存 (autocmds.lua)
 │       └── ...               # 其他插件配置
 ├── snippets/                 # 自定义 VSCode 风格 snippet（nvim-scissors 使用）
 └── lazy-lock.json            # 插件版本锁定（团队统一）
@@ -235,6 +234,8 @@ rustup component add rust-analyzer
 
 **调试配置使用 `.vscode/launch.json`**，详见下方 [DAP 调试配置](#dap-调试配置-launchjson) 章节。
 
+> Go 项目调试时，程序输出优先看 **DAP REPL**。如果日志很多，直接在外部终端看 `~/.cache/nvim/dap-go-stdout.log` 和 `~/.cache/nvim/dap-go-stderr.log` 更方便。
+
 ### 测试 (Neotest)
 
 | 快捷键 | 模式 | 功能 |
@@ -290,6 +291,23 @@ Octo 更多命令：`:Octo issue create`、`:Octo pr create`、`:Octo review com
 | `<leader>oc` | n | 清除缓存 |
 
 Overseer 支持从 `.vscode/tasks.json`、`Makefile`、`just` 等自动发现任务。
+
+## 日常工作流
+
+推荐把日常开发固定成这条最短路径：
+
+1. `<leader><space>` / `<leader>/` 找文件和代码
+2. `gd` / `gr` / `K` / `<leader>ca` 处理导航与修复
+3. `<leader>ts` 跑当前文件测试，`<leader>to` 看测试输出
+4. `<leader>oo` 跑项目任务，优先复用 `tasks.json` / `just` / `Makefile`
+5. `<leader>dc` 启动调试；Go 输出优先看 DAP REPL
+6. 如果 Go 调试日志过多，在外部终端执行 `tail -f ~/.cache/nvim/dap-go-stdout.log ~/.cache/nvim/dap-go-stderr.log`
+
+自动保存策略：
+
+- 触发时机是 `InsertLeave`、`FocusLost`、`BufLeave`
+- 使用 300ms 防抖，避免每次文本变动都触发写盘
+- 只对普通文件生效，不会保存特殊 buffer
 
 ### 终端
 
@@ -504,14 +522,16 @@ nvim main.go
       "name": "Debug Current File",
       "request": "launch",
       "mode": "debug",
-      "program": "${file}"
+      "program": "${file}",
+      "outputMode": "remote"
     },
     {
       "type": "go",
       "name": "Debug Package",
       "request": "launch",
       "mode": "debug",
-      "program": "${workspaceFolder}/cmd/server"
+      "program": "${workspaceFolder}/cmd/server",
+      "outputMode": "remote"
     }
   ]
 }
@@ -563,6 +583,12 @@ nvim src/main.rs
 2. 按 `<leader>dc` 弹出配置列表
 3. 选择配置名称（如 "Debug Package"）
 4. 开始调试，用 `<leader>db` 打断点
+
+**Go / Delve 备注：**
+
+- 如果你希望程序输出进入 DAP UI，请在 Go `launch.json` 里显式设置 `"outputMode": "remote"`
+- `console` 对 Go 并不是主输出面板，程序日志通常更适合看 `DAP REPL`
+- 长日志直接看 `~/.cache/nvim/dap-go-stdout.log` / `~/.cache/nvim/dap-go-stderr.log`
 
 **通用配置模板：**
 
@@ -692,8 +718,7 @@ nvim src/main.rs
 | yanky.nvim | 剪贴板历史 |
 | flash.nvim / leap.nvim | 快速跳转 |
 | todo-comments.nvim | TODO 高亮与搜索 |
-| automkdir.nvim | 自动创建目录 |
-| autosave (autocmds.lua) | 自动保存 |
+| autosave (autocmds.lua) | 防抖自动保存 |
 | dial.nvim | 增量/减量切换 |
 
 ### UI 与可视化

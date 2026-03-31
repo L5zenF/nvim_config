@@ -12,23 +12,60 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
--- 保存时自动创建目录
+-- 保存前确保父目录存在，替代 automkdir 插件。
 vim.api.nvim_create_autocmd("BufWritePre", {
-  callback = function()
-    local dir = vim.fn.expand("<afile>:p:h")
+  callback = function(args)
+    local path = vim.api.nvim_buf_get_name(args.buf)
+    if path == "" then
+      return
+    end
+    local dir = vim.fn.fnamemodify(path, ":p:h")
     if vim.fn.isdirectory(dir) == 0 then
       vim.fn.mkdir(dir, "p")
     end
   end,
 })
 
--- Auto-save on InsertLeave and TextChanged
-vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
-  group = vim.api.nvim_create_augroup("auto_save", { clear = true }),
-  callback = function()
-    if vim.bo.modified and vim.bo.buftype == "" and vim.fn.expand("%") ~= "" then
-      vim.cmd("silent! w")
+-- Auto-save with debounce on common "done editing" transitions.
+-- Avoid saving on every text change to reduce formatter/linter/test churn.
+local autosave_group = vim.api.nvim_create_augroup("auto_save", { clear = true })
+local autosave_timer = nil
+
+local function should_autosave(buf)
+  return vim.api.nvim_buf_is_valid(buf)
+    and vim.bo[buf].modified
+    and vim.bo[buf].buftype == ""
+    and vim.bo[buf].modifiable
+    and not vim.bo[buf].readonly
+    and vim.api.nvim_buf_get_name(buf) ~= ""
+end
+
+local function schedule_autosave(buf)
+  if autosave_timer then
+    autosave_timer:stop()
+    autosave_timer:close()
+    autosave_timer = nil
+  end
+
+  autosave_timer = vim.uv.new_timer()
+  autosave_timer:start(300, 0, vim.schedule_wrap(function()
+    if should_autosave(buf) then
+      vim.api.nvim_buf_call(buf, function()
+        vim.cmd("silent! write")
+      end)
     end
+    if autosave_timer then
+      autosave_timer:stop()
+      autosave_timer:close()
+      autosave_timer = nil
+    end
+  end))
+end
+
+vim.api.nvim_create_autocmd({ "InsertLeave", "FocusLost", "BufLeave" }, {
+  group = autosave_group,
+  callback = function(args)
+    schedule_autosave(args.buf)
   end,
 })
 
