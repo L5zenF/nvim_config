@@ -1,21 +1,33 @@
 return {
   {
-    "gorbit99/codewindow.nvim",
+    "wfxr/minimap.vim",
     event = "VeryLazy",
-    opts = {
-      auto_toggle = false,
-      max_minimap_height = 20,
-      minimap_width = 20,
-      use_treesitter = false, -- treesitter integration broken with new nvim-treesitter
-      use_lsp = true,
-      exclude_filetypes = { "help", "dashboard", "lazy", "mason", "neo-tree", "NvimTree", "Trouble" },
-    },
-    keys = {
-      { "<leader>um", function() require("codewindow.window").toggle_minimap() end, desc = "Toggle Minimap" },
-    },
-    config = function(_, opts)
-      local cw = require("codewindow")
-      cw.setup(opts)
+    build = "cargo install --locked code-minimap",
+    init = function()
+      vim.g.minimap_width = 10
+      vim.g.minimap_auto_start = 0
+      vim.g.minimap_auto_start_win_enter = 0
+      vim.g.minimap_highlight_range = 1
+      vim.g.minimap_highlight_search = 1
+      vim.g.minimap_git_colors = 1
+      vim.g.minimap_block_filetypes = {
+        "fugitive",
+        "nerdtree",
+        "tagbar",
+        "fzf",
+        "neo-tree",
+        "NvimTree",
+        "Trouble",
+        "dashboard",
+        "lazy",
+        "mason",
+        "snacks_picker_list",
+        "snacks_picker_input",
+        "minimap",
+      }
     end,
+    keys = {
+      { "<leader>um", "<cmd>MinimapToggle<cr>", desc = "Toggle Minimap" },
+    },
   },
 }

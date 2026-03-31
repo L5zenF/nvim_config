@@ -10,17 +10,17 @@ return {
       local set = vim.keymap.set
 
       -- Add cursors with mouse
-      set("n", "<C-leftmouse>", mc.addCursor)
-      set("n", "<C-leftdrag>", mc.cursorDrag)
+      set("n", "<C-leftmouse>", mc.handleMouse)
+      set("n", "<C-leftdrag>", mc.handleMouseDrag)
 
       -- Add/skip cursor above/below
-      set("n", "<c-k>", mc.cursorUp)
-      set("n", "<c-j>", mc.cursorDown)
-      set("n", "<s-up>", mc.cursorSkipUp)
-      set("n", "<s-down>", mc.cursorSkipDown)
+      set("n", "<c-k>", function() mc.lineAddCursor(-1) end)
+      set("n", "<c-j>", function() mc.lineAddCursor(1) end)
+      set("n", "<s-up>", function() mc.lineSkipCursor(-1) end)
+      set("n", "<s-down>", function() mc.lineSkipCursor(1) end)
 
       -- Add all matches
-      set("n", "<c-a>", mc.matchAllAdd)
+      set("n", "<c-a>", mc.matchAllAddCursors)
 
       -- Rotate cursor
       set("n", "<c-n>", mc.nextCursor)

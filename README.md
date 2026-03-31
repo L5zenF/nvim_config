@@ -85,7 +85,7 @@ nvim
 │       ├── neogen.lua        # Docstring 生成
 │       ├── scissors.lua      # Snippet 可视化编辑
 │       ├── ufo.lua           # 代码折叠增强
-│       ├── codewindow.lua    # Minimap
+│       ├── codewindow.lua    # Minimap (wfxr/minimap.vim + code-minimap)
 │       ├── coverage.lua      # 测试覆盖率
 │       ├── jira.lua          # Jira 集成
 │       ├── dbee.lua          # 数据库客户端
@@ -93,7 +93,7 @@ nvim
 │       ├── multicursor.lua   # 多光标编辑
 │       ├── arrow.lua         # 文件书签
 │       ├── automkdir.lua     # 自动创建目录
-│       ├── autosave.lua      # 自动保存
+│       ├── autosave (内置)    # 自动保存 (autocmds.lua)
 │       └── ...               # 其他插件配置
 ├── snippets/                 # 自定义 VSCode 风格 snippet（nvim-scissors 使用）
 └── lazy-lock.json            # 插件版本锁定（团队统一）
@@ -112,6 +112,7 @@ nvim
 | **fd** | 文件搜索 | `brew install fd` |
 | **A Nerd Font** | 图标显示 | 推荐 [JetBrainsMono Nerd Font](https://www.nerdfonts.com/font-downloads) |
 | **gcc/clang** | Tree-sitter 编译 | Xcode Command Line Tools |
+| **code-minimap** | Minimap 渲染引擎 | `cargo install --locked code-minimap` |
 
 ### Python 项目额外依赖
 
@@ -629,7 +630,7 @@ nvim src/main.rs
 | nvim-scissors | Snippet 可视化编辑 |
 | neogen | Docstring 生成 |
 | nvim-ufo | 代码折叠增强 |
-| codewindow.nvim | Minimap |
+| minimap.vim + code-minimap | Minimap（Rust 高性能渲染） |
 | jira.nvim | Jira 集成 |
 
 ### 语言支持
@@ -663,7 +664,7 @@ nvim src/main.rs
 | flash.nvim / leap.nvim | 快速跳转 |
 | todo-comments.nvim | TODO 高亮与搜索 |
 | automkdir.nvim | 自动创建目录 |
-| autosave (自定义) | 自动保存 |
+| autosave (autocmds.lua) | 自动保存 |
 | dial.nvim | 增量/减量切换 |
 
 ### UI 与可视化
