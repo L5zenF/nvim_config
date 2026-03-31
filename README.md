@@ -26,6 +26,8 @@
   - [项目与 Session](#项目与-session)
   - [书签与跳转](#书签与跳转)
   - [UI 控制](#ui-控制)
+  - [Buffer 管理](#buffer-管理)
+  - [Scratch Buffer](#scratch-buffer)
   - [数据库](#数据库)
   - [Jira](#jira)
   - [AI](#ai)
@@ -79,7 +81,7 @@ nvim
 │       ├── dap.lua           # DAP 调试 + Python uv 支持
 │       ├── gitsigns.lua      # Git 行内 blame
 │       ├── session.lua       # Session 持久化
-│       ├── snacks.lua        # Explorer/Projects/Words
+│       ├── snacks.lua        # Explorer/Projects/Words/Zen/Dim/Indent/Scratch
 │       ├── octo.lua          # GitHub PR/Issue
 │       ├── diffview.lua      # Git diff 对比
 │       ├── neogen.lua        # Docstring 生成
@@ -195,6 +197,7 @@ rustup component add rust-analyzer
 | `<leader>sS` | n | 搜索工作区符号 |
 | `<leader>co` | n | 组织 Import（Python/TS） |
 | `<leader>cr` | n | 重命名符号（增量预览） |
+| `<leader>cR` | n | 重命名文件（LSP 同步引用） |
 | `<leader>ca` | n | Code Action |
 | `<leader>cd` | n | 行诊断信息 |
 | `]d` / `[d` | n | 下一个/上一个诊断 |
@@ -255,17 +258,22 @@ rustup component add rust-analyzer
 | `<leader>gdh` | n | 文件变更历史 |
 | `<leader>gdH` | n | 当前文件变更历史 |
 | `<leader>gf` | n | 打开 GitHub permalink |
+| `<leader>go` | n | 在浏览器中打开当前文件 |
+| `<leader>gO` | n | 打开当前行 Permalink |
+| `<leader>gB` | n | 在浏览器中打开当前分支 |
 | `]h` / `[h` | n | 下一个/上一个 Git hunk |
 
 > 每行末尾自动显示最近提交者和时间（gitsigns current_line_blame）。
 
-### GitHub (Octo)
+### GitHub (Octo + gh CLI)
 
 | 快捷键 | 模式 | 功能 |
 |--------|------|------|
-| `<leader>gi` | n | 列出 GitHub Issues |
-| `<leader>gp` | n | 列出 Pull Requests |
+| `<leader>gi` | n | 列出 GitHub Issues（Octo） |
+| `<leader>gp` | n | 列出 Pull Requests（Octo） |
 | `<leader>gr` | n | 开始 Code Review |
+| `<leader>gI` | n | GitHub Issues（gh CLI picker） |
+| `<leader>gP` | n | GitHub PRs（gh CLI picker） |
 
 Octo 更多命令：`:Octo issue create`、`:Octo pr create`、`:Octo review comments` 等。
 
@@ -330,6 +338,27 @@ Overseer 支持从 `.vscode/tasks.json`、`Makefile`、`just` 等自动发现任
 | `<leader>ul` | n | 切换相对行号 |
 | `<leader>ud` | n | 切换 Diagnostics |
 | `<leader>uc` | n | 切换 Conceal |
+| `<leader>uz` | n | 切换 Zen Mode（专注模式） |
+| `<leader>uZ` | n | 切换 Zoom（全屏） |
+| `<leader>uD` | n | 切换 Dim（聚焦当前作用域） |
+
+### Buffer 管理
+
+| 快捷键 | 模式 | 功能 |
+|--------|------|------|
+| `<leader>bd` | n | 智能删除当前 Buffer（保留窗口布局） |
+| `<leader>bD` | n | 强制删除 Buffer（不保存） |
+| `<leader>bo` | n | 删除除当前外的所有 Buffer |
+| `<leader>ba` | n | 删除所有 Buffer |
+
+### Scratch Buffer
+
+| 快捷键 | 模式 | 功能 |
+|--------|------|------|
+| `<leader>.` | n | 打开/切换 Scratch Buffer |
+| `<leader>S` | n | 选择已有 Scratch Buffer |
+
+> Scratch Buffer 自动持久化，支持按项目/分支隔离，可用于临时笔记或代码实验。
 
 ### 数据库
 
@@ -574,7 +603,7 @@ nvim src/main.rs
 | blink.cmp | 自动补全 |
 | nvim-treesitter | 语法高亮 |
 | telescope.nvim | 模糊搜索 |
-| snacks.nvim | Explorer/Picker/Words/Scroll/Dashboard 等 |
+| snacks.nvim | Explorer/Picker/Words/Scroll/Zen/Dim/Indent/Scratch/Image |
 | which-key.nvim | 快捷键提示 |
 | noice.nvim | 命令行 UI 增强 |
 | lualine.nvim | 状态栏 |
