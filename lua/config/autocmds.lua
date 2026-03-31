@@ -22,6 +22,16 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   end,
 })
 
+-- Auto-save on InsertLeave and TextChanged
+vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
+  group = vim.api.nvim_create_augroup("auto_save", { clear = true }),
+  callback = function()
+    if vim.bo.modified and vim.bo.buftype == "" and vim.fn.expand("%") ~= "" then
+      vim.cmd("silent! w")
+    end
+  end,
+})
+
 -- 大文件性能优化 (>1MB)
 vim.api.nvim_create_autocmd("BufReadPre", {
   callback = function()
