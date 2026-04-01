@@ -4,6 +4,7 @@
 
 -- 不覆盖 LazyVim 默认快捷键，仅补充缺失的功能
 
+vim.keymap.set("n", "<leader>n", "<cmd>Noice telescope<cr>", { desc = "Notification" })
 -- Clear search highlight
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR><Esc>", { desc = "Clear search highlight" })
 
