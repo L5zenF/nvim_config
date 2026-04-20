@@ -27,47 +27,6 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 })
 
 -- Auto-save with debounce on common "done editing" transitions.
--- Avoid saving on every text change to reduce formatter/linter/test churn.
-local autosave_group = vim.api.nvim_create_augroup("auto_save", { clear = true })
-local autosave_timer = nil
-
-local function should_autosave(buf)
-  return vim.api.nvim_buf_is_valid(buf)
-    and vim.bo[buf].modified
-    and vim.bo[buf].buftype == ""
-    and vim.bo[buf].modifiable
-    and not vim.bo[buf].readonly
-    and vim.api.nvim_buf_get_name(buf) ~= ""
-end
-
-local function schedule_autosave(buf)
-  if autosave_timer then
-    autosave_timer:stop()
-    autosave_timer:close()
-    autosave_timer = nil
-  end
-
-  autosave_timer = vim.uv.new_timer()
-  autosave_timer:start(300, 0, vim.schedule_wrap(function()
-    if should_autosave(buf) then
-      vim.api.nvim_buf_call(buf, function()
-        vim.cmd("silent! write")
-      end)
-    end
-    if autosave_timer then
-      autosave_timer:stop()
-      autosave_timer:close()
-      autosave_timer = nil
-    end
-  end))
-end
-
-vim.api.nvim_create_autocmd({ "InsertLeave", "FocusLost", "BufLeave" }, {
-  group = autosave_group,
-  callback = function(args)
-    schedule_autosave(args.buf)
-  end,
-})
 
 -- 大文件性能优化 (>1MB)
 vim.api.nvim_create_autocmd("BufReadPre", {
